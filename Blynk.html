@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Blynk</title>
+  <style type="text/css">
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+</head>
+<body>
+<h1 id="blynk.md">Blynk.md</h1>
+<h2 id="table-of-contents">Table of Contents</h2>
+<ul>
+<li><a href="#blynkmd">Blynk.md</a>
+<ul>
+<li><a href="#table-of-contents">Table of Contents</a></li>
+<li><a href="#prerequisites">Prerequisites</a></li>
+<li><a href="#creating-a-blynk-device">Creating a Blynk Device</a></li>
+<li><a href="#connecting-blynk-to-the-tm4c">Connecting Blynk to the TM4C</a></li>
+<li><a href="#updating-esp8266">Updating ESP8266</a></li>
+</ul></li>
+</ul>
+<hr />
+<h2 id="prerequisites">Prerequisites</h2>
+<ol type="1">
+<li>Hardware is setup (TM4C hooked up to ESP8266 via UART)</li>
+<li>ESP8266 is flashed with latest <a href="https://github.com/ECE445L/EE445L-SP22-ESP8266-Blynk">firmware</a>
+<ol type="1">
+<li>See section <a href="#updating-esp8266">Updating ESP8266</a></li>
+</ol></li>
+</ol>
+<hr />
+<h2 id="creating-a-blynk-device">Creating a Blynk Device</h2>
+<ol type="1">
+<li>Sign into Blynk</li>
+</ol>
+<p><img src="resources/lab4/images/blynk/blynk_login.png" alt="Sign In" /></p>
+<ol start="2" type="1">
+<li>Create a template for your device
+<ol type="1">
+<li>Click the <code>Template</code> icon in the left taskbar</li>
+<li>Click the <code>+ New Template</code> button in the top right corner of the screen</li>
+<li>Name your template</li>
+<li>Select <code>ESP8266</code> as the hardware</li>
+<li>Click <code>Done</code></li>
+</ol></li>
+</ol>
+<p><img src="resources/lab4/images/blynk/create_template.png" alt="Create Template" /></p>
+<ol start="3" type="1">
+<li>Create datastreams for your widgets to connect to
+<ol type="1">
+<li>Click the <code>Datastreams</code> tab at the top of the screen</li>
+<li>Click the <code>+ New Datastream</code> button in the top right corner of the screen</li>
+<li>Name the datastream and select the virtual pin that it corresponds to</li>
+<li>Edit the rest of the datastream’s settings as you like</li>
+<li>Click <code>Create</code></li>
+</ol></li>
+</ol>
+<p><img src="resources/lab4/images/blynk/create_datastream.png" alt="Create Datasheet" /></p>
+<ol start="4" type="1">
+<li>Create a dashboard
+<ol type="1">
+<li>Click the <code>Datastreams</code> tab at the top of the screen</li>
+<li>Drag widgets from the widget box on the left of the screen</li>
+<li>Click a widget’s <code>gear icon</code> to edit it</li>
+<li>Name the widget and set its corresponding datastream</li>
+<li>Click <code>Save</code></li>
+</ol></li>
+</ol>
+<p><img src="resources/lab4/images/blynk/blank_dashboard.png" alt="Blank Dashboard" /></p>
+<p><img src="resources/lab4/images/blynk/edit_widget.png" alt="Edit Widget" /></p>
+<p><img src="resources/lab4/images/blynk/completed_dashboard.png" alt="Complete Dashboard" /></p>
+<ol start="5" type="1">
+<li>Create a device
+<ol type="1">
+<li>Save the template you created by clicking the <code>Save</code> button in the top right corner of the screen</li>
+<li>Click the <code>Search</code> icon in the left taskbar</li>
+<li>Click the <code>+ New Device</code> button in the top right corner of the screen</li>
+<li>Select the <code>From template</code> option</li>
+<li>Select the template you created</li>
+<li>Name the device</li>
+<li>Copy the <code>BLYNK_AUTH_TOKEN</code> from the top right corner of the screen</li>
+</ol></li>
+</ol>
+<p><img src="resources/lab4/images/blynk/create_device.png" alt="Create Device" /></p>
+<p><img src="resources/lab4/images/blynk/name_device.png" alt="Name Device" /></p>
+<p><img src="resources/lab4/images/blynk/device_home.png" alt="Device Hom" /></p>
+<ol start="6" type="1">
+<li>Create a mobile dashboard
+<ol type="1">
+<li>Log into the mobile app</li>
+<li>Click the device that you created earlier</li>
+<li>Click the <code>wrench</code> button in the top right corner of the screen to edit the dashboard</li>
+<li>Click the <code>+</code> button in the top right corner of the screen to add a widget</li>
+<li>Click the widget to edit it</li>
+<li>Name the widget and set its corresponding datastream</li>
+<li>Click the <code>X</code> button in the top left corner to exit the editor</li>
+</ol></li>
+</ol>
+<p><img src="resources/lab4/images/blynk/mobile_home.png" alt="Mobile Home" /></p>
+<p><img src="resources/lab4/images/blynk/mobile_device_home.png" alt="Mobile Device Home" /></p>
+<p><img src="resources/lab4/images/blynk/palette_editor.png" alt="Mobile Palette Editor" /></p>
+<p><img src="resources/lab4/images/blynk/widget_box.png" alt="Mobile Widget Box" /></p>
+<p><img src="resources/lab4/images/blynk/slider_editor.png" alt="Slider Widget" /></p>
+<p><img src="resources/lab4/images/blynk/display_widget.png" alt="Display Widget" /></p>
+<p><img src="resources/lab4/images/blynk/palette_editor_complete.png" alt="Complete Mobile Dashboard" /></p>
+<hr />
+<h2 id="connecting-blynk-to-the-tm4c">Connecting Blynk to the TM4C</h2>
+<ol type="1">
+<li><a href="#creating-a-blynk-device">Create a Blynk device</a></li>
+<li>You are provided a BLYNK template ID, device name, and auth token
+<ol type="1">
+<li>Only need the auth token</li>
+</ol></li>
+<li>Use the blynk_init function call to pass in your auth token, SSID, and password to connect to Blynk!
+<ol type="1">
+<li>We suggest the SSID and PASS to correspond to the Lab IOT WiFi or a mobile hotspot</li>
+</ol></li>
+<li>Compile and flash program to TM4C</li>
+<li>If the HW is setup properly, then Blynk should say the device is online</li>
+</ol>
+<hr />
+<h2 id="updating-esp8266">Updating ESP8266</h2>
+<ol type="1">
+<li>Download the <a href="https://www.arduino.cc/en/software">Arduino IDE</a>
+<ol type="1">
+<li>Last tested version: <code>1.8.19</code></li>
+</ol></li>
+<li>Add ESP8266 indices to Arduino board manager URLs <code>https://arduino.esp8266.com/stable/package_esp8266com_index.json</code>
+<ol type="1">
+<li><code>File &gt; Preferences &gt; Additional Board Manager URLs:</code></li>
+<li>Go to <code>Tools &gt; Boards Manager</code></li>
+<li>Search for <code>esp8266</code></li>
+<li>Install <code>v3.0.2</code></li>
+</ol></li>
+<li>Add Blynk libraries
+<ol type="1">
+<li><code>Tools &gt; Manage Libraries...</code></li>
+<li>Search for <code>blynk</code>, install <code>Blynk</code> by Volodymyr Shymanskyy v1.1.0</li>
+</ol></li>
+<li>Change board to <code>esp8266</code>
+<ol type="1">
+<li><code>Tools &gt; Board: "xxx" &gt; ESP8266 Boards (3.0.2) &gt; Generic ESP8266 Module</code></li>
+</ol></li>
+<li>Clone latest <a href="https://github.com/ECE445L/EE445L-SP22-ESP8266-Blynk">firmware</a></li>
+<li>Open up ESP_TM4C_Xfer_Rev_HandShake_NEW_BLYNK project
+<ol type="1">
+<li><code>EE445L-F22-ESP8266-Blynk &gt; ESP_TM4C_Xfer_Rev_HandShake_NEW_BLYNK &gt; ESP_TM4C_Xfer_Rev_HandShake_NEW_BLYNK.ino</code></li>
+</ol></li>
+<li>Compile project (checkmark button)</li>
+<li>Select port to flash to
+<ol type="1">
+<li><code>Tools &gt; Port: "xxx"</code></li>
+<li>Select open port, assuming only one USB device is currently connected</li>
+</ol></li>
+<li>Connect ESP8266 to ECE 445L ESP8266 flasher board (or similar UART-USB FTDI board)</li>
+<li>Upload using flash button (rightward facing arrow).</li>
+</ol>
+</body>
+</html>
