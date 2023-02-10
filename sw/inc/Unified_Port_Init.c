@@ -303,6 +303,16 @@ void Port_F_Init(void){
   GPIO_PORTF_AFSEL_R    = 0x00;             // disable alt funct on PF7-0
   GPIO_PORTF_PUR_R      = 0x11;             // enable pull-up on PF0 and PF4
   GPIO_PORTF_DEN_R      = 0x1F;             // enable digital I/O on PF4-0
+	
+	//Port F is rising edge triggered interrupt on PF0 and PF4
+	GPIO_PORTF_IS_R &= ~0x11;									//PF0 and PF4 are edge-sensitive
+	GPIO_PORTF_IEV_R |= 0x11;                 //PF0 and PF4 are rising edge
+	
+	//Arming the interrupt
+	GPIO_PORTF_ICR_R = 0x11;      // clear flag4
+  GPIO_PORTF_IM_R |= 0x11;      //arm interrupt on PF4 *** No IME bit as mentioned in Book ***
+  NVIC_PRI7_R = (NVIC_PRI7_R&0xFF00FFFF)|0x00300000; //  priority 3
+  NVIC_EN0_R = 0x40000000;      // (h) enable interrupt 30 in NVIC  
 }
 
 

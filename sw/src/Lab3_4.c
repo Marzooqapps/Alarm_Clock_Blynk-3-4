@@ -61,6 +61,8 @@
 #include "./inc/ST7735.h"
 /* Add whatever else you need here! */
 #include "./lib/RGB/RGB.h"
+#include "./inc/Timer0A.h"
+#include "./inc/EdgeInterruptPortF.h"
 
 /* TODO: enable this for lab 4. */
 #define LAB_4 false
@@ -73,6 +75,14 @@
 #define PF2   (*((volatile uint32_t *)0x40025010)) // BLUE LED
 #define PF3   (*((volatile uint32_t *)0x40025020)) // GREEN LED
 #define PF4   (*((volatile uint32_t *)0x40025040)) // Right Button
+	
+/** Global Variable. */
+uint16_t Time;
+uint16_t Seconds;
+uint16_t Minutes;
+uint16_t Hour;
+
+enum TimeType {hour, min, sec}timeType;
 
 /** Function declarations. */
 /**
@@ -87,6 +97,28 @@ void DelayWait10ms(uint32_t n);
  * @brief Blocks the current process until PF4 (Left Button <=> SW1) is pressed.
  */
 void Pause(void);
+
+/**
+ *@brief Gets called every second by Timer0A Interrupt Handler every second, increments global variable second
+ *changes the global variable time to current time
+ */
+void changeTime(void);
+
+/**
+ *@brief Gets called by the IS handler for PF0, increments the global variable Minutes;
+ */
+void changeMinutes(void);
+
+/**
+ *@brief Gets called by the IS handler for PF4, increments the global variable Hours;
+ */
+void changeHours(void);
+
+/**
+ *@brief Displays the time on the ST7735 LCD, displays differenty time types (hours, mins, secs) at different locations on the LCD
+ *@param Takes in enum TimeType and sets the cursor on the LCD accoring to time type;
+ */
+void displayTime(uint16_t, enum TimeType);
 
 /** Entry point. */
 int main(void) {
@@ -115,6 +147,8 @@ int main(void) {
     /* Start RGB flashing. WARNING! BRIGHT FLASHING COLORS. DO NOT RUN IF YOU HAVE EPILEPSY. */
     RGBInit();
 
+		//Enable Timer0A so it interrupts every second and has a priority of 4
+		Timer0A_Init(changeTime, 80000000, 4);
     /* Allows any enabled timers to begin running. */
     EnableInterrupts();
 
@@ -151,6 +185,10 @@ int main(void) {
 
     while (1) {
         /* TODO: Write your code here! */
+				uint16_t myTime = Time;
+				displayTime(myTime/1000, hour);
+				displayTime((myTime%100)/10, min);
+				displayTime(myTime%10, sec);
         WaitForInterrupt();
     }
     return 1;
@@ -175,4 +213,49 @@ void Pause(void) {
     while (PF4 == 0x10) {
         DelayWait10ms(10);
     }
+}
+void changeTime(void){
+		Seconds++;
+  if(Seconds==60){
+    Seconds = 0;
+    Minutes++;
+    if(Minutes == 60){
+      Minutes = 0;
+      Hour++;
+    }    
+  } 
+	Time = 1000*Hour+10*Minutes+Seconds;
+}
+
+void displayTime(uint16_t time, enum TimeType timeType){
+
+			if(timeType == hour){
+				ST7735_SetCursor(2,10);
+			}
+			else if(timeType == min){
+				ST7735_SetCursor(5,10);
+			}
+			else{
+				ST7735_SetCursor(8,10);
+			}
+			ST7735_OutUDec(time);
+}
+
+
+void changeMinutes(void){
+		if(Minutes < 60){
+			Minutes++;
+		}
+		else{
+			Minutes = 0;
+		}
+}
+
+void changeHours(void){
+		if(Hour < 24){
+			Hour++;
+		}
+		else{
+			Hour = 0;
+		}
 }

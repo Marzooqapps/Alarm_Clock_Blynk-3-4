@@ -10,7 +10,7 @@
       <TargetName>Lab 3_4</TargetName>
       <ToolsetNumber>0x4</ToolsetNumber>
       <ToolsetName>ARM-ADS</ToolsetName>
-      <pCCUsed>6180000::V6.18::ARMCLANG</pCCUsed>
+      <pCCUsed>6190000::V6.19::ARMCLANG</pCCUsed>
       <uAC6>1</uAC6>
       <TargetOption>
         <TargetCommonOption>
@@ -443,6 +443,11 @@
               <FileName>Blynk.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\inc\Blynk.c</FilePath>
+            </File>
+            <File>
+              <FileName>EdgeInterruptPortF.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\inc\EdgeInterruptPortF.c</FilePath>
             </File>
           </Files>
         </Group>

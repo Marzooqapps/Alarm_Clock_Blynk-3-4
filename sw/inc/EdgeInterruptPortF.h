@@ -31,5 +31,5 @@
 // user button connected to PF4 (increment counter on falling edge)
 
 
-void EdgeCounterPortF_Init(void);
+void EdgePortF_Init(void(*task1)(void), void(*task2)(void));
 
