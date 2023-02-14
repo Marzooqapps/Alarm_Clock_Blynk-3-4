@@ -420,11 +420,6 @@
               <FilePath>..\inc\Timer0A.c</FilePath>
             </File>
             <File>
-              <FileName>Timer2A.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\inc\Timer2A.c</FilePath>
-            </File>
-            <File>
               <FileName>LED.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\inc\LED.c</FilePath>
@@ -448,6 +443,11 @@
               <FileName>EdgeInterruptPortF.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\inc\EdgeInterruptPortF.c</FilePath>
+            </File>
+            <File>
+              <FileName>Timer2A.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\inc\Timer2A.c</FilePath>
             </File>
           </Files>
         </Group>

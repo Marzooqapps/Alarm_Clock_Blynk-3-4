@@ -63,6 +63,7 @@
 #include "./lib/RGB/RGB.h"
 #include "./inc/Timer0A.h"
 #include "./inc/EdgeInterruptPortF.h"
+#include "./inc/Timer2A.h"
 
 /* TODO: enable this for lab 4. */
 #define LAB_4 false
@@ -149,6 +150,10 @@ int main(void) {
 
 		//Enable Timer0A so it interrupts every second and has a priority of 4
 		Timer0A_Init(changeTime, 80000000, 4);
+		
+		//Enable PortF Interrupt
+		EdgePortF_Init(changeHours, changeMinutes);
+		
     /* Allows any enabled timers to begin running. */
     EnableInterrupts();
 
@@ -189,6 +194,10 @@ int main(void) {
 				displayTime(myTime/1000, hour);
 				displayTime((myTime%100)/10, min);
 				displayTime(myTime%10, sec);
+				
+
+				
+				PF2 ^= 0x02;												//Heartbeat
         WaitForInterrupt();
     }
     return 1;
@@ -228,7 +237,8 @@ void changeTime(void){
 }
 
 void displayTime(uint16_t time, enum TimeType timeType){
-
+			
+			//use SNprintf //
 			if(timeType == hour){
 				ST7735_SetCursor(2,10);
 			}

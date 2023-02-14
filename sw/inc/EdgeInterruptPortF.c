@@ -34,7 +34,57 @@
 
 static void (*PF0pressed)(void);
 static void (*PF4pressed)(void);
+int16_t PFflag;
 
+/* Function definiations */
+//Arms the PortF Interrupt
+void GPIOPortF_Arm(void);
+void Timer3A_Stop(void);
+
+// ***************** Timer3A_Start ****************
+// Activate Timer3 interrupts to run user task whenever Armed by PortF Handler
+// Inputs:  none
+// Outputs: none
+void Timer3A_Start(void){
+  SYSCTL_RCGCTIMER_R |= 0x08;   // 0) activate timer3
+
+  TIMER3_CTL_R = 0x00000000;    // 1) disable timer3A during setup
+  TIMER3_CFG_R = 0x00000000;    // 2) configure for 32-bit mode
+  TIMER3_TAMR_R = 0x00000001;   // 3) 1-SHOT mode
+  TIMER3_TAILR_R = 160000;    // 4) reload value
+  TIMER3_TAPR_R = 0;            // 5) bus clock resolution
+  TIMER3_ICR_R = 0x00000001;    // 6) clear timer3A timeout flag
+  TIMER3_IMR_R = 0x00000001;    // 7) arm timeout interrupt
+  NVIC_PRI8_R = (NVIC_PRI8_R&0x00FFFFFF)|(2<<29); // priority is 2
+// interrupts enabled in the main program after all devices initialized
+// vector number 39, interrupt number 23
+  NVIC_EN1_R = 1<<(35-32);      // 9) enable IRQ 35 in NVIC
+  TIMER3_CTL_R = 0x00000001;    // 10) enable timer3A
+}
+
+void Timer3A_Handler(void){
+  Timer3A_Stop();
+  if(PFflag == 0){
+		(*PF4pressed)();
+	}
+	else{
+		(*PF0pressed)();
+	}
+	GPIOPortF_Arm();
+}
+
+void Timer3A_Stop(void){
+  NVIC_DIS1_R = 1<<(35-32);        // 9) disable interrupt 35 in NVIC
+  TIMER3_CTL_R = 0x00000000;  		 // 10) disable timer3A
+}
+
+
+
+
+
+
+
+//Enable PortF with Edge Interupts
 void EdgePortF_Init(void(*task1)(void), void(*task2)(void)){
   
   SYSCTL_RCGCGPIO_R     |= 0x00000020;      // activate clock for Port F
@@ -55,24 +105,34 @@ void EdgePortF_Init(void(*task1)(void), void(*task2)(void)){
 	GPIO_PORTF_IEV_R |= 0x11;                 //PF0 and PF4 are rising edge
 	
 	//Arming the interrupt
-	GPIO_PORTF_ICR_R = 0x11;      // clear flag4
-  GPIO_PORTF_IM_R |= 0x11;      //arm interrupt on PF4 *** No IME bit as mentioned in Book ***
-  NVIC_PRI7_R = (NVIC_PRI7_R&0xFF00FFFF)|0x00300000; //  priority 3
-  NVIC_EN0_R = 0x40000000;      // (enable interrupt 30 in NVIC  
+	GPIOPortF_Arm();
   
 	//Map User function to interrupt
 	PF0pressed = task1;
 	PF4pressed = task2;
 }
 void GPIOPortF_Handler(void){
+	//start a timer here and then the timer interrupt gets your job done.
+	GPIO_PORTF_IM_R &= ~0x11;
+	Timer3A_Start();				//Start one shot timer
 	if(GPIO_PORTF_RIS_R & (~0x10)){	//Check if PF4 caused the interrupt
-		GPIO_PORTF_IM_R = 0x10;
-		(*PF4pressed)();
+		GPIO_PORTF_ICR_R = 0x10;
+		PFflag = 0;										//flag = 0 means PF4 was pressed
+		
 	}
   else{				//Else PF0 caused the interrupt
-		GPIO_PORTF_IM_R = 0x01;
-		(*PF0pressed)();
+		GPIO_PORTF_ICR_R = 0x01;
+		PFflag = 1;										//flag = 1 means PF0 was pressed
+
   }
+}
+
+//Arm the Interrupt for Port F
+void GPIOPortF_Arm(){
+	GPIO_PORTF_ICR_R = 0x11;      // clear flag4
+  GPIO_PORTF_IM_R |= 0x11;      //arm interrupt on PF4 *** No IME bit as mentioned in Book ***
+  NVIC_PRI7_R = (NVIC_PRI7_R&0xFF00FFFF)|0x00300000; //  priority 3
+  NVIC_EN0_R = 0x40000000;      // (enable interrupt 30 in NVIC
 }
 
 
