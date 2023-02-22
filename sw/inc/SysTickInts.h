@@ -33,7 +33,7 @@
 //        Maximum is 2^24-1
 //        Minimum is determined by lenght of ISR
 // Output: none
-void SysTick_Init(uint32_t period);
+void SysTick_Init(uint32_t period, void(*Task)(void));
 
 // Interrupt service routine
 // Executed every 20ns*(period)

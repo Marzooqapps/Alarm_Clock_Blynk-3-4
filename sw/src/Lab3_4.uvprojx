@@ -449,6 +449,11 @@
               <FileType>1</FileType>
               <FilePath>..\inc\Timer2A.c</FilePath>
             </File>
+            <File>
+              <FileName>SysTickInts.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\inc\SysTickInts.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

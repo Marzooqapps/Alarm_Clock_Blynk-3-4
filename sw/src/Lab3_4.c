@@ -64,6 +64,7 @@
 #include "./inc/Timer0A.h"
 #include "./inc/EdgeInterruptPortF.h"
 #include "./inc/Timer2A.h"
+#include "./inc/SysTickInts.h"
 
 /* TODO: enable this for lab 4. */
 #define LAB_4 false
@@ -148,8 +149,8 @@ int main(void) {
     /* Start RGB flashing. WARNING! BRIGHT FLASHING COLORS. DO NOT RUN IF YOU HAVE EPILEPSY. */
     RGBInit();
 
-		//Enable Timer0A so it interrupts every second and has a priority of 4
-		Timer0A_Init(changeTime, 80000000, 4);
+		//Enable SysTick so it interrupts every second and has a priority of 2
+		SysTick_Init(80000000,changeTime);
 		
 		//Enable PortF Interrupt
 		EdgePortF_Init(changeHours, changeMinutes);
@@ -166,7 +167,7 @@ int main(void) {
     UART_OutString(
         "ECE445L Lab 3 & 4.\r\n"
         "Press SW1 to start.\r\n");
-    Pause();
+    // Temporayily remove Pause();
 		
     /* Stop RGB and turn off any on LEDs. */
     RGBStop();
@@ -190,10 +191,13 @@ int main(void) {
 
     while (1) {
         /* TODO: Write your code here! */
+
+				DisableInterrupts();
 				uint16_t myTime = Time;
-				displayTime(myTime/1000, hour);
-				displayTime((myTime%100)/10, min);
-				displayTime(myTime%10, sec);
+				EnableInterrupts();
+				displayTime(myTime/10000, hour);
+				displayTime((myTime/100)%10, min);
+				displayTime(myTime%100, sec);
 				
 
 				
@@ -233,7 +237,7 @@ void changeTime(void){
       Hour++;
     }    
   } 
-	Time = 1000*Hour+10*Minutes+Seconds;
+	Time = 10000*Hour+100*Minutes+Seconds;
 }
 
 void displayTime(uint16_t time, enum TimeType timeType){
@@ -269,3 +273,4 @@ void changeHours(void){
 			Hour = 0;
 		}
 }
+ 

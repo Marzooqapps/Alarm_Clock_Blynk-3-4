@@ -1,3 +1,4 @@
+
 // Timer0A.c
 // Runs on LM4F120/TM4C123
 // Use Timer0A in periodic mode to request interrupts at a particular
@@ -9,11 +10,9 @@
    "Embedded Systems: Introduction to ARM Cortex M Microcontrollers"
    ISBN: 978-1469998749, Jonathan Valvano, copyright (c) 2020
    Volume 1, Program 9.8
-
   "Embedded Systems: Real Time Interfacing to ARM Cortex M Microcontrollers",
    ISBN: 978-1463590154, Jonathan Valvano, copyright (c) 2020
    Volume 2, Program 7.5, example 7.6
-
  Copyright 2020 by Jonathan W. Valvano, valvano@mail.utexas.edu
     You may use, edit, run or distribute this file
     as long as the above copyright notice remains
