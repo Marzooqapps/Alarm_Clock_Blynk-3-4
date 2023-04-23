@@ -5,16 +5,18 @@
 // Marzooq Shah
 // February 20, 2023
 
-#include <stdint.h>
 #include <stdio.h>
+#include <stdint.h>
 #include <math.h>
+#include <stdbool.h>
 #include "../inc/tm4c123gh6pm.h"
 
 //Globar Variables - start
 
-uint8_t PC4pressed;
+bool PC4pressed;
 
 extern bool Alarm;
+extern bool AlarmChange;
 
 //Global Variables - end
 
@@ -24,7 +26,7 @@ void Timer3B_Start(void){
   TIMER3_CTL_R = 0x00000000;    // 1) disable timer3A during setup
   TIMER3_CFG_R = 0x00000000;    // 2) configure for 32-bit mode
   TIMER3_TAMR_R = 0x00000001;   // 3) 1-SHOT mode
-  TIMER3_TAILR_R = 160000;    // 4) reload value
+  TIMER3_TAILR_R = 160000;    	// 4) reload value
   TIMER3_TAPR_R = 0;            // 5) bus clock resolution
   TIMER3_ICR_R = 0x00000002;    // 6) clear timer3B timeout flag
   TIMER3_IMR_R = 0x00000001;    // 7) arm timeout interrupt
@@ -57,7 +59,7 @@ void Port_C_Arm(void){
 	
 	GPIO_PORTC_ICR_R = 0x30;      // clear falg
   GPIO_PORTC_IM_R |= 0x30;      //arm interrupt on PC4 and PC5 *** No IME bit as mentioned in Book ***
-  NVIC_PRI0_R = (NVIC_PRI0_R&0xFF00FFFF)|0x00200000; //  priority 2
+  NVIC_PRI0_R = (NVIC_PRI0_R&0xFF00FFFF)|0x00600000; //  priority 6
   NVIC_EN0_R = 0x00000004;      // enable interrupt 2 in NVIC
 }	
 
@@ -67,16 +69,24 @@ void GPIOPortC_Handler(void){
 	Timer3B_Start();				//Start one shot timer
 	if(GPIO_PORTC_RIS_R & (~0x10)){	//Check if PC4 caused the interrupt
 		GPIO_PORTC_ICR_R = 0x10;
-		PC4pressed = 1;										//flag =1 means PC4 was pressed
-		
+		PC4pressed = true;										// means PC4 was pressed	
 	}
+	
   else{				//Else PC5 caused the interrupt
 		GPIO_PORTF_ICR_R = 0x20;
-		PC4pressed = 0;										//flag = 0 means PC5 was pressed
-
+		PC4pressed = false;										// means PC5 was pressed
   }
 }
 
 void Timer3B_Handler(void){
+	if (PC4pressed){
+		Alarm = !Alarm;
+	}
+	
+	else{
+		
+		AlarmChange = true;
+	}
+	
 	
 }

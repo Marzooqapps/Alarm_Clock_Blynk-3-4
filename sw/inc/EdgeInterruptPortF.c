@@ -30,7 +30,8 @@
 // user button connected to PF4 (increment counter on falling edge)
 
 #include <stdint.h>
-#include "../inc/tm4c123gh6pm.h"
+#include "inc/tm4c123gh6pm.h"
+#include "inc/EdgeInterruptPortF.h"
 
 static void (*PF0pressed)(void);
 static void (*PF4pressed)(void);

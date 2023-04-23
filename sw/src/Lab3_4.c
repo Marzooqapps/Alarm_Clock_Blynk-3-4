@@ -83,6 +83,11 @@ uint16_t Time;
 uint16_t Seconds;
 uint16_t Minutes;
 uint16_t Hour;
+uint16_t AlarmHours;
+uint16_t AlarmMinutes; 
+
+bool Alarm;
+bool AlarmChange;
 
 enum TimeType {hour, min, sec}timeType;
 
@@ -121,6 +126,13 @@ void changeHours(void);
  *@param Takes in enum TimeType and sets the cursor on the LCD accoring to time type;
  */
 void displayTime(uint16_t, enum TimeType);
+
+void displayAlarmTime(uint16_t, uint16_t);
+
+
+void changeAlarmMinutes(void);
+void changeAlarmHours(void);
+void playSound(void);
 
 /** Entry point. */
 int main(void) {
@@ -191,13 +203,25 @@ int main(void) {
 
     while (1) {
         /* TODO: Write your code here! */
-
+				uint16_t alarmMinutes;
+				uint16_t alarmHours;
 				DisableInterrupts();
 				uint16_t myTime = Time;
+				alarmMinutes = AlarmMinutes;
+				alarmHours =  AlarmHours;
 				EnableInterrupts();
+			
+				ST7735_FillScreen(ST7735_BLACK);
+			
 				displayTime(myTime/10000, hour);
 				displayTime((myTime/100)%10, min);
 				displayTime(myTime%100, sec);
+				if(Alarm){
+					displayAlarmTime(alarmMinutes, alarmHours);
+					if(alarmMinutes == (myTime/100)%10 && alarmHours == myTime/10000){
+						playSound();
+					}
+				}
 				
 
 				
@@ -255,22 +279,61 @@ void displayTime(uint16_t time, enum TimeType timeType){
 			ST7735_OutUDec(time);
 }
 
+void displayAlarmTime(uint16_t min, uint16_t hours){
+		
+		//Display hours
+		ST7735_SetCursor(2,8);
+		ST7735_OutUDec(min);
+		//Display  minutes
+		ST7735_SetCursor(2,8);
+		ST7735_OutUDec(hours);
+}
 
 void changeMinutes(void){
-		if(Minutes < 60){
+		if(AlarmChange){
+			changeAlarmMinutes();
+		}
+		else{
+			if(Minutes < 60){
 			Minutes++;
 		}
 		else{
 			Minutes = 0;
 		}
+		}
+		
 }
 
 void changeHours(void){
-		if(Hour < 24){
+		if(AlarmChange){
+			changeAlarmHours();
+		}
+		else{
+			if(Hour < 24){
 			Hour++;
 		}
 		else{
 			Hour = 0;
+		}
+		}
+		
+}
+
+void changeAlarmMinutes(void){
+	if(AlarmMinutes < 60){
+			AlarmMinutes++;
+		}
+		else{
+			AlarmMinutes = 0;
+		}
+}
+
+void changeAlarmHours(void){
+	if(AlarmHours < 24){
+			AlarmHours++;
+		}
+		else{
+			AlarmHours = 0;
 		}
 }
  
