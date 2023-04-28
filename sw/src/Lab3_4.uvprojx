@@ -459,6 +459,21 @@
               <FileType>1</FileType>
               <FilePath>.\InterruptPortC.c</FilePath>
             </File>
+            <File>
+              <FileName>InterruptPortC.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\InterruptPortC.h</FilePath>
+            </File>
+            <File>
+              <FileName>PWM.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\inc\PWM.c</FilePath>
+            </File>
+            <File>
+              <FileName>PWM.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\inc\PWM.h</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

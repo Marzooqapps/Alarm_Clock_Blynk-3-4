@@ -116,7 +116,7 @@ void GPIOPortF_Handler(void){
 	//start a timer here and then the timer interrupt gets your job done.
 	GPIO_PORTF_IM_R &= ~0x11;
 	Timer3A_Start();				//Start one shot timer
-	if(GPIO_PORTF_RIS_R & (~0x10)){	//Check if PF4 caused the interrupt
+	if(GPIO_PORTF_RIS_R & (0x10)){	//Check if PF4 caused the interrupt
 		GPIO_PORTF_ICR_R = 0x10;
 		PFflag = 0;										//flag = 0 means PF4 was pressed
 		
@@ -124,7 +124,6 @@ void GPIOPortF_Handler(void){
   else{				//Else PF0 caused the interrupt
 		GPIO_PORTF_ICR_R = 0x01;
 		PFflag = 1;										//flag = 1 means PF0 was pressed
-
   }
 }
 

@@ -23,7 +23,7 @@
 void Unified_Port_Init(void){
   Port_A_Init();
   Port_B_Init();  
-  Port_C_Init();
+  //Port_C_Init();
   Port_D_Init();
   Port_E_Init();  
   Port_F_Init();
@@ -180,7 +180,7 @@ void Port_B_Init(void){
 // PC6 = LEFT switch
 // PC7 = DOWN switch
 //
-
+/*
 void Port_C_Init(void){ 
   
   SYSCTL_RCGCGPIO_R     |=  0x04;         // Activate clock for Port C
@@ -193,7 +193,7 @@ void Port_C_Init(void){
   GPIO_PORTC_PUR_R       =  0xF0;         // enable pull-up on PC7-PC4
   GPIO_PORTC_DEN_R      |=  0xF0;         // enable digital port 
   }  
-  
+  */
 // ----------------------------------------------------------------------------
 // ----------------    PORT D Initialization   --------------------------------
 // ----------------------------------------------------------------------------
